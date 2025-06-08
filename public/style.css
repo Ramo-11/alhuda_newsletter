@@ -1,0 +1,166 @@
+/* ========== Base Styles ========== */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #f9f9f9;
+  color: #333;
+}
+
+header h1 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ========== Header ========== */
+header {
+  background: #d0ac3d;
+  color: #fff;
+  padding: 1rem;
+  text-align: center;
+}
+
+/* ========== Newsletter List Layout ========== */
+.newsletter-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 2rem 1rem;
+  align-items: center;
+}
+
+/* ========== Newsletter Card ========== */
+.newsletter-item {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  width: 90%;
+  max-width: 800px;
+  transition: transform 0.2s ease;
+}
+
+.newsletter-item:hover {
+  transform: translateY(-2px);
+}
+
+.newsletter-cover {
+  width: 110px;
+  height: auto;
+  border-radius: 6px;
+  margin-right: 1.5rem;
+}
+
+.newsletter-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.newsletter-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #2e3b4e;
+  margin-bottom: 0.4rem;
+}
+
+/* ========== Newsletter Text Content ========== */
+.newsletter-item a {
+  text-decoration: none;
+  font-weight: bold;
+  color: #2e3b4e;
+}
+
+.views {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: #777;
+}
+
+.theme,
+.volume,
+.views {
+  font-size: 1rem;
+  color: #444;
+  margin-bottom: 0.2rem;
+}
+
+/* ========== Viewer Section ========== */
+.viewer {
+  padding: 1rem;
+}
+
+/* ========== Newsletter Content Alignment ========== */
+.item-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.item-content > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.item-content a {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #2e3b4e;
+  margin-bottom: 0.4rem;
+}
+
+/* ========== Download Icon ========== */
+.download-icon {
+  font-size: 1.4rem;
+  color: #2e3b4e;
+  margin-left: 1rem;
+  text-decoration: none;
+}
+
+.download-icon:hover {
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
+/* ========== Button Styles ========== */
+.fullscreen-button {
+  display: inline-block;
+  background-color: #2e3b4e;
+  color: #fff;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  text-decoration: none;
+  margin-right: 0.5rem;
+}
+
+.fullscreen-button:hover {
+  background-color: #1f2b3b;
+}
+
+.viewer-controls {
+  display: flex;
+  justify-content: flex-start;
+  padding: 1rem;
+  gap: 1rem;
+}
+
+.viewer-controls.bottom {
+  justify-content: flex-end;
+}
+
+.back-button {
+  background-color: #2e3b4e;
+  color: #fff;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.back-button:hover {
+  background-color: #1f2b3b;
+}

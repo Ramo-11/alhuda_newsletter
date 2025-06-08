@@ -1,0 +1,22 @@
+<%- include("partials/headers") %>
+
+<section class="newsletter-list">
+  <% newsletters.forEach(newsletter => { %>
+    <a href="/newsletter/<%= encodeURIComponent(newsletter.file) %>" class="newsletter-link">
+      <div class="newsletter-item">
+        <img src="/covers/<%= newsletter.cover %>" alt="Cover" class="newsletter-cover" />
+        <div class="item-content">
+          <div>
+            <div class="newsletter-title"><%= newsletter.file %></div>
+            <p class="theme"><strong>Theme:</strong> <%= newsletter.theme %></p>
+            <p class="volume">
+              Volume: <%= newsletter.volume %> - Issue: <%= newsletter.issue !== null ? newsletter.issue : 'Special' %>
+            </p>
+            <span class="views">Views: <%= newsletter.views || 0 %></span>
+          </div>
+          <a href="/download/<%= encodeURIComponent(newsletter.file) %>" class="download-icon" title="Download PDF" onclick="event.stopPropagation();">⬇️</a>
+        </div>
+      </div>
+    </a>
+  <% }) %>
+</section>

@@ -1,0 +1,13 @@
+<%- include("partials/headers") %>
+
+<div class="viewer">
+  <div class="viewer-controls">
+    <a href="/newsletters/<%= encodeURIComponent(filename) %>" target="_blank" class="fullscreen-button">Open Full Screen</a>
+  </div>
+
+  <iframe src="/newsletters/<%= encodeURIComponent(filename) %>" width="100%" height="600px" style="border: none;"></iframe>
+
+  <div class="viewer-controls bottom">
+    <a href="/" class="back-button">← Back to List</a>
+  </div>
+</div>
