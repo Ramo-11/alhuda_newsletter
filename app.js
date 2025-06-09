@@ -5,12 +5,11 @@ const app = express();
 
 const PORT = 3000;
 const viewCountFile = './viewCount.json';
-const newslettersDir = path.join(__dirname, 'public', 'newsletters'); // updated path
+const newslettersDir = path.join(__dirname, 'public', 'newsletters');
 
 app.set('view engine', 'ejs');
-app.use(express.static('public')); // serves everything under /public
+app.use(express.static('public'));
 
-// Ensure view count file exists
 if (!fs.existsSync(viewCountFile)) fs.writeFileSync(viewCountFile, '{}');
 
 app.get('/', (req, res) => {
@@ -45,11 +44,14 @@ app.get('/download/:filename', (req, res) => {
     const views = JSON.parse(fs.readFileSync(viewCountFile));
     views[filename] = (views[filename] || 0) + 1;
     fs.writeFileSync(viewCountFile, JSON.stringify(views));
-    res.download(filePath); // triggers browser download
+    res.download(filePath);
   } else {
     res.status(404).send('File not found');
   }
 });
 
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok' });
+});
 
 app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));
