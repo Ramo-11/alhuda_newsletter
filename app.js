@@ -16,16 +16,6 @@ db.prepare(`
   )
 `).run();
 
-const seedFile = './viewSeed.json';
-const seedData = JSON.parse(fs.readFileSync(seedFile, 'utf8'));
-
-for (const [filename, count] of Object.entries(seedData)) {
-  const exists = db.prepare('SELECT 1 FROM views WHERE filename = ?').get(filename);
-  if (!exists) {
-    db.prepare('INSERT INTO views (filename, count) VALUES (?, ?)').run(filename, count);
-  }
-}
-
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 
