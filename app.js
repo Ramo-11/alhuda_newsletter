@@ -1,24 +1,56 @@
 const express = require('express');
-const fs = require('fs');
 const path = require('path');
+const fs = require('fs');
+const Database = require('better-sqlite3');
 const app = express();
 
 const PORT = 3000;
-const viewCountFile = './viewCount.json';
 const newslettersDir = path.join(__dirname, 'public', 'newsletters');
+
+// Set up SQLite DB
+const db = new Database('views.db');
+db.prepare(`
+  CREATE TABLE IF NOT EXISTS views (
+    filename TEXT PRIMARY KEY,
+    count INTEGER DEFAULT 0
+  )
+`).run();
+
+const seedFile = './viewSeed.json';
+const seedData = JSON.parse(fs.readFileSync(seedFile, 'utf8'));
+
+for (const [filename, count] of Object.entries(seedData)) {
+  const exists = db.prepare('SELECT 1 FROM views WHERE filename = ?').get(filename);
+  if (!exists) {
+    db.prepare('INSERT INTO views (filename, count) VALUES (?, ?)').run(filename, count);
+  }
+}
 
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 
-if (!fs.existsSync(viewCountFile)) fs.writeFileSync(viewCountFile, '{}');
+// Get view count from DB
+function getViews(filename) {
+  const row = db.prepare('SELECT count FROM views WHERE filename = ?').get(filename);
+  return row ? row.count : 0;
+}
+
+// Increment view count
+function incrementView(filename) {
+  const existing = getViews(filename);
+  if (existing) {
+    db.prepare('UPDATE views SET count = count + 1 WHERE filename = ?').run(filename);
+  } else {
+    db.prepare('INSERT INTO views (filename, count) VALUES (?, 1)').run(filename);
+  }
+}
 
 app.get('/', (req, res) => {
   const meta = JSON.parse(fs.readFileSync('./newsletters.json'));
-  const views = JSON.parse(fs.readFileSync(viewCountFile));
 
   const newsletters = meta.map(n => ({
     ...n,
-    views: views[n.file] || 0
+    views: getViews(n.file)
   }));
 
   res.render('index', { newsletters });
@@ -27,10 +59,9 @@ app.get('/', (req, res) => {
 app.get('/newsletter/:filename', (req, res) => {
   const filename = req.params.filename;
   const filePath = path.join(newslettersDir, filename);
+
   if (fs.existsSync(filePath)) {
-    const views = JSON.parse(fs.readFileSync(viewCountFile));
-    views[filename] = (views[filename] || 0) + 1;
-    fs.writeFileSync(viewCountFile, JSON.stringify(views));
+    incrementView(filename);
     res.render('newsletter', { filename });
   } else {
     res.status(404).send('Newsletter not found');
@@ -40,10 +71,9 @@ app.get('/newsletter/:filename', (req, res) => {
 app.get('/download/:filename', (req, res) => {
   const filename = req.params.filename;
   const filePath = path.join(newslettersDir, filename);
+
   if (fs.existsSync(filePath)) {
-    const views = JSON.parse(fs.readFileSync(viewCountFile));
-    views[filename] = (views[filename] || 0) + 1;
-    fs.writeFileSync(viewCountFile, JSON.stringify(views));
+    incrementView(filename);
     res.download(filePath);
   } else {
     res.status(404).send('File not found');
