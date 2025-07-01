@@ -1,15 +1,48 @@
 <%- include("partials/headers") %>
 
-<div class="viewer">
-  <div class="viewer-controls">
-    <a href="/newsletters/<%= encodeURIComponent(filename) %>" target="_blank" class="fullscreen-button">Open Full Screen</a>
+<div class="newsletter-viewer">
+  <!-- Top Controls -->
+  <div class="viewer-header">
+    <div class="viewer-nav">
+      <a href="/" class="back-button">← Back to List</a>
+      <a href="/newsletters/<%= encodeURIComponent(filename) %>" target="_blank" class="fullscreen-button">Open Full Screen</a>
+    </div>
   </div>
 
-<div style="width: 100vw; height: 100vh; overflow: auto;">
-  <iframe src="/newsletters/<%= encodeURIComponent(filename) %>" width="100%" height="100%" style="border: none;"></iframe>
-</div>
+  <!-- Success Message -->
+  <% if (typeof success !== 'undefined' && success) { %>
+    <div class="success-message">
+      Thank you for your feedback! Your thoughts help us create better content for our community.
+    </div>
+  <% } %>
 
-  <div class="viewer-controls bottom">
-    <a href="/" class="back-button">← Back to List</a>
+  <!-- PDF Viewer -->
+  <div class="pdf-container">
+    <iframe src="/newsletters/<%= encodeURIComponent(filename) %>" class="pdf-viewer" title="Newsletter PDF"></iframe>
+  </div>
+
+  <!-- Feedback Section -->
+  <div class="feedback-section">
+    <h3>Share Your Thoughts</h3>
+    <p>Help us improve by sharing what resonated with you (optional)</p>
+    
+    <form class="feedback-form" action="/feedback/<%= encodeURIComponent(filename) %>" method="POST">
+      <div class="form-group">
+        <label for="favorite-section">What was your favorite page?</label>
+        <input type="text" id="favorite-section" name="favoriteSection" placeholder="e.g., Main Article, Introducing a member, Events...">
+      </div>
+      
+      <div class="form-group">
+        <label for="resonated">What resonated with you most?</label>
+        <textarea id="resonated" name="resonated" rows="3" placeholder="Share what stood out to you..."></textarea>
+      </div>
+      
+      <div class="form-group">
+        <label for="general-feedback">Tell us your feedback so we can improve</label>
+        <textarea id="general-feedback" name="generalFeedback" rows="2" placeholder="Suggestions, comments, or anything else..."></textarea>
+      </div>
+      
+      <button type="submit" class="submit-feedback">Submit Feedback</button>
+    </form>
   </div>
 </div>
