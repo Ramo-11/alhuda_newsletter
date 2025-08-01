@@ -4,17 +4,23 @@
   <% newsletters.forEach(newsletter => { %>
     <a href="/newsletter/<%= encodeURIComponent(newsletter.file) %>" class="newsletter-link">
       <div class="newsletter-item">
-        <img src="/covers/<%= newsletter.cover %>" alt="Cover" class="newsletter-cover" />
+        <img src="/covers/<%= newsletter.cover %>" alt="<%= newsletter.file %> Cover" class="newsletter-cover" />
         <div class="item-content">
-          <div>
-            <div class="newsletter-title"><%= newsletter.file %></div>
-            <p class="theme"><strong>Theme:</strong> <%= newsletter.theme %></p>
-            <p class="volume">
-              Volume: <%= newsletter.volume %> - Issue: <%= newsletter.issue !== null ? newsletter.issue : 'Special' %>
-            </p>
-            <span class="views">Views: <%= newsletter.views || 0 %></span>
+          <div class="newsletter-details">
+            <h2 class="newsletter-title"><%= newsletter.file %></h2>
+            <div class="newsletter-meta">
+              <div class="meta-item">
+                <span class="meta-label">Theme:</span>
+                <span class="meta-value"><%= newsletter.theme %></span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">Volume:</span>
+                <span class="meta-value"><%= newsletter.volume %> - Issue <%= newsletter.issue !== null ? newsletter.issue : 'Special' %></span>
+              </div>
+            </div>
+            <div class="views"><%= newsletter.views || 0 %> views</div>
           </div>
-          <a href="/download/<%= encodeURIComponent(newsletter.file) %>" class="download-icon" title="Download PDF" onclick="event.stopPropagation();">⬇️</a>
+          <a href="/download/<%= encodeURIComponent(newsletter.file) %>" class="download-icon" title="Download PDF" onclick="event.stopPropagation();">⬇</a>
         </div>
       </div>
     </a>
