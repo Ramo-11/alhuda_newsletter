@@ -1,3 +1,8 @@
 node_modules/
 package-lock.json
 viewSeed.json
+views.json
+feedback.json
+newsletter.db
+newsletter.db-shm
+newsletter.db-wal

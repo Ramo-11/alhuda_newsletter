@@ -1,28 +1,72 @@
 <%- include("partials/headers") %>
+<link rel="stylesheet" href="/css/index.css" />
 
-<section class="newsletter-list">
-  <% newsletters.forEach(newsletter => { %>
-    <a href="/newsletter/<%= encodeURIComponent(newsletter.file) %>" class="newsletter-link">
-      <div class="newsletter-item">
-        <img src="/covers/<%= newsletter.cover %>" alt="<%= newsletter.file %> Cover" class="newsletter-cover" />
-        <div class="item-content">
-          <div class="newsletter-details">
-            <h2 class="newsletter-title"><%= newsletter.file %></h2>
-            <div class="newsletter-meta">
-              <div class="meta-item">
-                <span class="meta-label">Theme:</span>
-                <span class="meta-value"><%= newsletter.theme %></span>
-              </div>
-              <div class="meta-item">
-                <span class="meta-label">Volume:</span>
-                <span class="meta-value"><%= newsletter.volume %> - Issue <%= newsletter.issue !== null ? newsletter.issue : 'Special' %></span>
-              </div>
+<section class="newsletter-grid">
+    <% newsletters.forEach(newsletter => { %>
+    <div class="newsletter-card">
+        <a href="/newsletter/<%= encodeURIComponent(newsletter.file) %>" class="card-link">
+            <div class="card-image-wrapper">
+                <img
+                    src="/covers/<%= newsletter.cover %>"
+                    alt="<%= newsletter.file %> Cover"
+                    class="card-image"
+                />
+                <div class="card-overlay">
+                    <span class="view-button">View Newsletter</span>
+                </div>
             </div>
-            <div class="views"><%= newsletter.views || 0 %> views</div>
-          </div>
-          <a href="/download/<%= encodeURIComponent(newsletter.file) %>" class="download-icon" title="Download PDF" onclick="event.stopPropagation();">⬇</a>
+        </a>
+
+        <div class="card-content">
+            <h2 class="card-title"><%= newsletter.file.replace('.pdf', '') %></h2>
+
+            <div class="card-meta">
+                <div class="meta-row">
+                    <span class="meta-icon">📖</span>
+                    <span class="meta-text"><%= newsletter.theme %></span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-icon">📅</span>
+                    <span class="meta-text"
+                        >Vol <%= newsletter.volume %>, Issue <%= newsletter.issue !== null ?
+                        newsletter.issue : 'Special' %></span
+                    >
+                </div>
+            </div>
+
+            <div class="card-stats">
+                <div class="stat-item">
+                    <span class="stat-label">Views</span>
+                    <span class="stat-value"><%= newsletter.views || 0 %></span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Likes</span>
+                    <span class="stat-value" data-like-count="<%= newsletter.file %>"
+                        ><%= newsletter.likes || 0 %></span
+                    >
+                </div>
+            </div>
+
+            <div class="card-actions">
+                <a
+                    href="/newsletter/<%= encodeURIComponent(newsletter.file) %>"
+                    class="btn btn-primary"
+                >
+                    Read Now
+                </a>
+                <button
+                    class="btn btn-like <%= newsletter.hasLiked ? 'liked' : '' %>"
+                    data-filename="<%= encodeURIComponent(newsletter.file) %>"
+                    onclick="event.stopPropagation();"
+                >
+                    <span class="like-icon">❤️</span>
+                    <span class="like-text"><%= newsletter.hasLiked ? 'Unlike' : 'Like' %></span>
+                </button>
+            </div>
         </div>
-      </div>
-    </a>
-  <% }) %>
+    </div>
+    <% }) %>
 </section>
+
+<script src="/js/index.js"></script>
+<%- include("partials/footer") %>

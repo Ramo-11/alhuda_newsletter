@@ -1,48 +1,151 @@
 <%- include("partials/headers") %>
+<link rel="stylesheet" href="/css/newsletter.css" />
 
-<div class="newsletter-viewer">
-  <!-- Top Controls -->
-  <div class="viewer-header">
-    <div class="viewer-nav">
-      <a href="/" class="back-button">← Back to List</a>
-      <a href="/newsletters/<%= encodeURIComponent(filename) %>" target="_blank" class="fullscreen-button">Open Full Screen</a>
-    </div>
-  </div>
+<div class="newsletter-container">
+    <!-- Sidebar for desktop, top for mobile -->
+    <aside class="sidebar">
+        <div class="sidebar-content">
+            <!-- Navigation -->
+            <div class="sidebar-section">
+                <a href="/" class="btn-back">
+                    <span class="btn-icon">←</span>
+                    Back to List
+                </a>
+                <a
+                    href="/newsletters/<%= encodeURIComponent(filename) %>"
+                    target="_blank"
+                    class="btn-fullscreen"
+                >
+                    <span class="btn-icon">⛶</span>
+                    Full Screen
+                </a>
+            </div>
 
-  <!-- Success Message -->
-  <% if (typeof success !== 'undefined' && success) { %>
-    <div class="success-message">
-      Thank you for your feedback! Your thoughts help us create better content for our community.
-    </div>
-  <% } %>
+            <!-- Stats & Like -->
+            <div class="sidebar-section stats-section">
+                <h3>Newsletter Stats</h3>
+                <div class="stat-grid">
+                    <div class="stat-box">
+                        <div class="stat-info">
+                            <span class="stat-label">Views</span>
+                            <span class="stat-number"><%= views || 0 %></span>
+                        </div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-info">
+                            <span class="stat-label">Likes</span>
+                            <span class="stat-number" id="like-count"><%= likes || 0 %></span>
+                        </div>
+                    </div>
+                </div>
 
-  <!-- PDF Viewer -->
-  <div class="pdf-container">
-    <iframe src="/newsletters/<%= encodeURIComponent(filename) %>" class="pdf-viewer" title="Newsletter PDF"></iframe>
-  </div>
+                <button
+                    class="btn-like <%= hasLiked ? 'liked' : '' %>"
+                    id="like-button"
+                    data-filename="<%= encodeURIComponent(filename) %>"
+                >
+                    <span class="like-icon">❤️</span>
+                    <span class="like-text"
+                        ><%= hasLiked ? 'Unlike' : 'Like this Newsletter' %></span
+                    >
+                </button>
+            </div>
 
-  <!-- Feedback Section -->
-  <div class="feedback-section">
-    <h3>Share Your Thoughts</h3>
-    <p>Help us improve by sharing what resonated with you (optional)</p>
-    
-    <form class="feedback-form" action="/feedback/<%= encodeURIComponent(filename) %>" method="POST">
-      <div class="form-group">
-        <label for="favorite-section">What was your favorite page?</label>
-        <input type="text" id="favorite-section" name="favoriteSection" placeholder="e.g., Main Article, Introducing a member, Events...">
-      </div>
-      
-      <div class="form-group">
-        <label for="resonated">What resonated with you most?</label>
-        <textarea id="resonated" name="resonated" rows="3" placeholder="Share what stood out to you..."></textarea>
-      </div>
-      
-      <div class="form-group">
-        <label for="general-feedback">Tell us your feedback so we can improve</label>
-        <textarea id="general-feedback" name="generalFeedback" rows="2" placeholder="Suggestions, comments, or anything else..."></textarea>
-      </div>
-      
-      <button type="submit" class="submit-feedback">Submit Feedback</button>
-    </form>
-  </div>
+            <!-- Feedback Form -->
+            <div class="sidebar-section feedback-form-section">
+                <h3>Share Your Feedback</h3>
+                <p class="feedback-description">Help us improve our newsletters</p>
+
+                <% if (typeof success !== 'undefined' && success) { %>
+                <div class="success-alert">✓ Thank you for your feedback!</div>
+                <% } %>
+
+                <form
+                    class="feedback-form"
+                    action="/feedback/<%= encodeURIComponent(filename) %>"
+                    method="POST"
+                >
+                    <div class="form-group">
+                        <label for="favorite-section">Favorite Page</label>
+                        <input
+                            type="text"
+                            id="favorite-section"
+                            name="favoriteSection"
+                            placeholder="e.g., Main Article, Events..."
+                        />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="resonated">What Resonated?</label>
+                        <textarea
+                            id="resonated"
+                            name="resonated"
+                            rows="3"
+                            placeholder="Share what stood out..."
+                        ></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="general-feedback">General Feedback</label>
+                        <textarea
+                            id="general-feedback"
+                            name="generalFeedback"
+                            rows="2"
+                            placeholder="Suggestions or comments..."
+                        ></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-submit">Submit Feedback</button>
+                </form>
+            </div>
+
+            <!-- Previous Feedback -->
+            <% if (feedback && feedback.length > 0) { %>
+            <div class="sidebar-section feedback-list-section">
+                <h3>Community Feedback (<%= feedback.length %>)</h3>
+                <div class="feedback-list">
+                    <% feedback.slice(0, 5).forEach((item, index) => { %>
+                    <div class="feedback-item">
+                        <div class="feedback-header">
+                            <span class="feedback-number">#<%= index + 1 %></span>
+                            <span class="feedback-date"
+                                ><%= new Date(item.created_at).toLocaleDateString() %></span
+                            >
+                        </div>
+                        <% if (item.favorite_section) { %>
+                        <p class="feedback-text">
+                            <strong>Favorite:</strong> <%= item.favorite_section %>
+                        </p>
+                        <% } %> <% if (item.resonated) { %>
+                        <p class="feedback-text">
+                            <strong>Resonated:</strong> <%= item.resonated %>
+                        </p>
+                        <% } %> <% if (item.general_feedback) { %>
+                        <p class="feedback-text">
+                            <strong>Feedback:</strong> <%= item.general_feedback %>
+                        </p>
+                        <% } %>
+                    </div>
+                    <% }) %> <% if (feedback.length > 5) { %>
+                    <p class="feedback-more">+ <%= feedback.length - 5 %> more feedback</p>
+                    <% } %>
+                </div>
+            </div>
+            <% } %>
+        </div>
+    </aside>
+
+    <!-- PDF Viewer -->
+    <main class="pdf-main">
+        <div class="pdf-wrapper">
+            <iframe
+                src="/newsletters/<%= encodeURIComponent(filename) %>"
+                class="pdf-viewer"
+                title="Newsletter PDF"
+            ></iframe>
+        </div>
+    </main>
 </div>
+
+<script src="/js/newsletter.js"></script>
+<%- include("partials/footer") %>

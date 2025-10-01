@@ -1,90 +1,98 @@
 <%- include("partials/headers") %>
-<link rel="stylesheet" href="/admin.css">
+<link rel="stylesheet" href="/css/admin.css" />
+
 <div class="admin-container">
-  <% if (typeof authenticated === 'undefined' || !authenticated) { %>
+    <% if (typeof authenticated === 'undefined' || !authenticated) { %>
     <!-- Login Form -->
     <div class="admin-login">
-      <h2>Admin Access</h2>
-      <% if (typeof error !== 'undefined' && error) { %>
-        <div class="error-message">Incorrect password</div>
-      <% } %>
-      <form action="/admin" method="POST" class="login-form">
-        <div class="form-group">
-          <label for="password">Password:</label>
-          <input type="password" id="password" name="password" required>
-        </div>
-        <button type="submit" class="login-button">Access Admin</button>
-      </form>
+        <h2>Admin Access</h2>
+        <% if (typeof error !== 'undefined' && error) { %>
+        <div class="error-message">Incorrect password. Please try again.</div>
+        <% } %>
+        <form action="/admin" method="POST" class="login-form">
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    required
+                    autocomplete="current-password"
+                />
+            </div>
+            <button type="submit" class="login-button">Access Dashboard</button>
+        </form>
     </div>
-  <% } else { %>
+    <% } else { %>
     <!-- Feedback Dashboard -->
     <div class="admin-dashboard">
-      <div class="dashboard-header">
-        <h2>Newsletter Feedback Dashboard</h2>
-        <a href="/admin/logout" class="logout-button">Logout</a>
-      </div>
-      
-      <div class="stats-summary">
-        <div class="stat-card">
-          <h3>Total Feedback</h3>
-          <span class="stat-number"><%= feedback.length %></span>
+        <div class="dashboard-header">
+            <h2>Feedback Dashboard</h2>
+            <a href="/admin/logout" class="logout-button">Logout</a>
         </div>
-        <div class="stat-card">
-          <h3>Newsletters with Feedback</h3>
-          <span class="stat-number"><%= uniqueNewsletters %></span>
-        </div>
-      </div>
 
-      <div class="feedback-list">
-        <% if (feedback.length === 0) { %>
-          <div class="no-feedback">
-            <p>No feedback submitted yet.</p>
-          </div>
-        <% } else { %>
-          <% Object.keys(groupedFeedback).forEach(filename => { %>
-            <div class="newsletter-feedback-group">
-              <div class="newsletter-header">
-                <h3><%= filename %></h3>
-                <span class="feedback-count"><%= groupedFeedback[filename].length %> feedback(s)</span>
-              </div>
-              
-              <div class="feedback-entries">
-                <% groupedFeedback[filename].forEach((item, index) => { %>
-                  <div class="individual-feedback">
-                    <div class="feedback-meta">
-                      <span class="feedback-number">Feedback #<%= index + 1 %></span>
-                      <span class="feedback-date"><%= new Date(item.createdAt).toLocaleDateString() %> at <%= new Date(item.createdAt).toLocaleTimeString() %></span>
-                    </div>
-                    
-                    <div class="feedback-content">
-                      <% if (item.favoriteSection) { %>
-                        <div class="feedback-field">
-                          <strong>Favorite Section:</strong>
-                          <p><%= item.favoriteSection %></p>
-                        </div>
-                      <% } %>
-                      
-                      <% if (item.resonated) { %>
-                        <div class="feedback-field">
-                          <strong>What Resonated:</strong>
-                          <p><%= item.resonated %></p>
-                        </div>
-                      <% } %>
-                      
-                      <% if (item.generalFeedback) { %>
-                        <div class="feedback-field">
-                          <strong>General Feedback:</strong>
-                          <p><%= item.generalFeedback %></p>
-                        </div>
-                      <% } %>
-                    </div>
-                  </div>
-                <% }) %>
-              </div>
+        <div class="stats-summary">
+            <div class="stat-card">
+                <h3>Total Feedback</h3>
+                <span class="stat-number"><%= feedback.length %></span>
             </div>
-          <% }) %>
-        <% } %>
-      </div>
+            <div class="stat-card">
+                <h3>Newsletters with Feedback</h3>
+                <span class="stat-number"><%= uniqueNewsletters %></span>
+            </div>
+        </div>
+
+        <div class="feedback-list">
+            <% if (feedback.length === 0) { %>
+            <div class="no-feedback">
+                <p>No feedback submitted yet.</p>
+            </div>
+            <% } else { %> <% Object.keys(groupedFeedback).forEach(filename => { %>
+            <div class="newsletter-feedback-group">
+                <div class="newsletter-header">
+                    <h3><%= filename %></h3>
+                    <span class="feedback-count"><%= groupedFeedback[filename].length %></span>
+                </div>
+
+                <div class="feedback-entries">
+                    <% groupedFeedback[filename].forEach((item, index) => { %>
+                    <div class="individual-feedback">
+                        <div class="feedback-meta">
+                            <span class="feedback-number">#<%= index + 1 %></span>
+                            <span class="feedback-date">
+                                <%= new Date(item.created_at).toLocaleDateString('en-US', { year:
+                                'numeric', month: 'long', day: 'numeric' }) %> at <%= new
+                                Date(item.created_at).toLocaleTimeString('en-US', { hour: '2-digit',
+                                minute: '2-digit' }) %>
+                            </span>
+                        </div>
+
+                        <div class="feedback-content">
+                            <% if (item.favorite_section) { %>
+                            <div class="feedback-field">
+                                <strong>Favorite Section</strong>
+                                <p><%= item.favorite_section %></p>
+                            </div>
+                            <% } %> <% if (item.resonated) { %>
+                            <div class="feedback-field">
+                                <strong>What Resonated</strong>
+                                <p><%= item.resonated %></p>
+                            </div>
+                            <% } %> <% if (item.general_feedback) { %>
+                            <div class="feedback-field">
+                                <strong>General Feedback</strong>
+                                <p><%= item.general_feedback %></p>
+                            </div>
+                            <% } %>
+                        </div>
+                    </div>
+                    <% }) %>
+                </div>
+            </div>
+            <% }) %> <% } %>
+        </div>
     </div>
-  <% } %>
+    <% } %>
 </div>
+
+<%- include("partials/footer") %>
