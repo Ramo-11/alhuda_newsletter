@@ -3,6 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const Database = require('better-sqlite3');
 const session = require('express-session');
+const SqliteStore = require('better-sqlite3-session-store')(session);
 const app = express();
 
 const PORT = 3000;
@@ -93,10 +94,17 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(
     session({
+        store: new SqliteStore({
+            client: db,
+            expired: {
+                clear: true,
+                intervalMs: 900000, // 15 minutes
+            },
+        }),
         secret: 'alhuda-newsletter-secret-key-2025',
         resave: false,
         saveUninitialized: true,
-        cookie: { maxAge: 365 * 24 * 60 * 60 * 1000 }, // 1 year
+        cookie: { maxAge: 365 * 24 * 60 * 60 * 1000 },
     })
 );
 
