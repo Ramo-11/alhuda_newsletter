@@ -346,6 +346,38 @@
     display: block;
 }
 
+.mobile-pdf-message {
+    display: none;
+    text-align: center;
+    padding: 3rem 2rem;
+}
+
+.mobile-pdf-message h2 {
+    margin-bottom: 1rem;
+    color: #111827;
+}
+
+.mobile-pdf-message p {
+    color: #6b7280;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.btn-open-pdf {
+    display: inline-block;
+    background: #6366f1;
+    color: #ffffff;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.btn-open-pdf:hover {
+    background: #4f46e5;
+}
+
 /* Responsive Design */
 @media (max-width: 1024px) {
     .newsletter-container {
@@ -375,44 +407,11 @@
         position: relative;
     }
 
-    .pdf-viewer {
-        /* Make iframe scrollable on mobile */
-        overflow: auto;
-        -webkit-overflow-scrolling: touch;
+    .mobile-pdf-message {
+        display: block;
     }
 
-    /* Add overlay message for mobile users */
-    .pdf-wrapper::after {
-        content: 'Tap "Full Screen" above for best viewing experience';
-        position: absolute;
-        bottom: 1rem;
-        left: 50%;
-        transform: translateX(-50%);
-        background: rgba(99, 102, 241, 0.95);
-        color: white;
-        padding: 0.75rem 1.25rem;
-        border-radius: 8px;
-        font-size: 0.85rem;
-        font-weight: 600;
-        text-align: center;
-        pointer-events: none;
-        z-index: 10;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        max-width: 80%;
-        animation: pulseMessage 2s ease-in-out infinite;
-    }
-
-    @keyframes pulseMessage {
-        0%,
-        100% {
-            opacity: 0.9;
-        }
-        50% {
-            opacity: 1;
-        }
-    }
-
-    .pdf-wrapper.message-hidden::after {
+    .desktop-only {
         display: none;
     }
 }

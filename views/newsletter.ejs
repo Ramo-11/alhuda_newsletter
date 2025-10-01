@@ -138,9 +138,23 @@
     <!-- PDF Viewer -->
     <main class="pdf-main">
         <div class="pdf-wrapper">
+            <div class="mobile-pdf-message">
+                <h2>View PDF</h2>
+                <p>
+                    For the best mobile experience, tap the button below to open the PDF in your
+                    browser's built-in viewer:
+                </p>
+                <a
+                    href="/newsletters/<%= encodeURIComponent(filename) %>"
+                    target="_blank"
+                    class="btn-open-pdf"
+                >
+                    Open PDF
+                </a>
+            </div>
             <iframe
                 src="/newsletters/<%= encodeURIComponent(filename) %>"
-                class="pdf-viewer"
+                class="pdf-viewer desktop-only"
                 title="Newsletter PDF"
             ></iframe>
         </div>
