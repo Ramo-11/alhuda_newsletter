@@ -50,4 +50,13 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => successAlert.remove(), 500);
         }, 5000);
     }
+
+    if (window.innerWidth <= 1024) {
+        const pdfWrapper = document.querySelector('.pdf-wrapper');
+        if (pdfWrapper) {
+            setTimeout(() => {
+                pdfWrapper.classList.add('message-hidden');
+            }, 10000);
+        }
+    }
 });
