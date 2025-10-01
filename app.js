@@ -39,7 +39,6 @@ db.exec(`
   );
 `);
 
-// Initialize newsletters from JSON
 const initializeNewsletters = () => {
     const meta = JSON.parse(fs.readFileSync('./newsletters.json'));
 
